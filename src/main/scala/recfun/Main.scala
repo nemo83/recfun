@@ -1,5 +1,7 @@
 package recfun
 
+import scala.annotation.tailrec
+
 object Main {
   def main(args: Array[String]) {
     println("Pascal's Triangle")
@@ -17,6 +19,7 @@ object Main {
     if (c > r)
       throw new IllegalArgumentException("incorrect column index")
     def calculateRow(prevRow: List[Int]): List[Int] = {
+      @tailrec
       def calculateRowLoop(prevReversedRow: List[Int], partialResult: List[Int]): List[Int] = {
         if (prevReversedRow.length == 1) List(1) ::: partialResult
         else calculateRowLoop(prevReversedRow.tail, List(prevReversedRow.head + prevReversedRow(1)) ::: partialResult)
@@ -33,10 +36,32 @@ object Main {
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean = {
+    val filteredChars = chars.filter(x => x == '(' || x == ')')
+    @tailrec
+    def balanceLoop(openOnes: Int, chars: List[Char]): Boolean = {
+      if (chars.isEmpty)
+        if (openOnes == 0) true
+        else false
+      else if (chars.head == '(') balanceLoop(openOnes + 1, chars.tail)
+      else if (openOnes == 0) false
+      else balanceLoop(openOnes - 1, chars.tail)
+    }
+    balanceLoop(0, filteredChars)
+  }
 
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChange(money: Int, coins: List[Int]): Int = {
+
+    val filteredSortedReversedCoins = coins.filter(x => x <= money).sorted.reverse
+
+    def countChangeLoop(numCorrectCombination: Int, coins: List[Int]): Int = {
+      0
+    }
+
+    countChangeLoop(0, filteredSortedReversedCoins)
+
+  }
 }
